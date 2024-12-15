@@ -213,7 +213,7 @@ fun searchBox(currentWeather: CurrentWeather) {
 @Composable
 fun searchBar(viewModel: HomeViewModel) {
     var text by rememberSaveable { mutableStateOf("") }
-    val value2 by remember{viewModel.searchState}
+    val searchState by remember{viewModel.searchState}
     val clearSearch by remember {
         viewModel.clearSearch
     }
@@ -221,7 +221,7 @@ fun searchBar(viewModel: HomeViewModel) {
         text = ""
         viewModel.clearSearch.value = false
     }
-    if (text != "") {
+    if (text != "" ) {
         viewModel.searching.value = true
     }
     if (text != "") {
@@ -265,14 +265,16 @@ fun searchBar(viewModel: HomeViewModel) {
                         .padding(end = 5.dp)
                         .clickable {
                             viewModel.getWeatherList()
-                                   },
+                            viewModel.weatherState.value = viewModel.nullCurrentWeather
+                            viewModel.searching.value = false
+                        },
                     imageVector = Icons.Filled.Search,
                     contentDescription = "Enter Search",
                     tint = searchColor
                 )
             }
         }
-        if (value2.isNotEmpty()) {
+        if (searchState.isNotEmpty() && text != "") {
             searchList(viewModel = viewModel)
         }
     }
@@ -339,10 +341,9 @@ fun appScreen(viewModel: HomeViewModel, sharedPref: SharedPreferences? = null) {
                 searchBar(viewModel)
                 if (weather.location.name == "" && search.isEmpty() && weatherList.isEmpty()) {
                     placeHolderScreen()
-                } else if (searching) {
-
                 } else if (weatherList.isNotEmpty()) {
                     searchBoxList(viewModel = viewModel)
+                } else if (searching) {
                 } else {
                     if (sharedPref != null){
                     with (sharedPref.edit()) {

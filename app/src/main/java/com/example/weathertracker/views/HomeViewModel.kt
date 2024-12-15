@@ -20,13 +20,12 @@ class HomeViewModel() : ViewModel() {
 
     val KEY = "3c249c10d8484006870174108241412"
     val repository = WeatherRepository()
-    val searchState: MutableState<List<SearchObject>> = mutableStateOf(emptyList())
-    val weatherState: MutableState<CurrentWeather> = mutableStateOf(
-        CurrentWeather(
-            WLocation(""),
-            WCurrent(0.0, WCondition("", ""), 0.0, 0.0, 0.0)
-        )
+    val nullCurrentWeather = CurrentWeather(
+        WLocation(""),
+        WCurrent(0.0, WCondition("", ""), 0.0, 0.0, 0.0)
     )
+    val searchState: MutableState<List<SearchObject>> = mutableStateOf(emptyList())
+    val weatherState: MutableState<CurrentWeather> = mutableStateOf(nullCurrentWeather)
     val weatherStateList: MutableState<MutableList<CurrentWeather>> =
         mutableStateOf(mutableListOf())
     val clearSearch: MutableState<Boolean> = mutableStateOf(false)
